@@ -8,7 +8,8 @@ spec:
     gpu: True
 build_steps:
     - pip install runway-python==0.0.74
-    - pip install torch torchvision tensorboard tensorboardX PyYAML torchfile
+    - pip install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=10.0 -c pytorch 
+    - pip install PyYAML torchfile
     - pip install -r requirements.txt
     - if_gpu: echo "Building in a GPU environment..."
     - if_cpu: echo "Building in a CPU only environment..."
