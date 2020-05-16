@@ -14,7 +14,7 @@ a2b = 1
 @runway.setup(options={'generator_checkpoint': runway.file(description="Checkpoint for the generator", extension='.pt')})
 def setup(opts):
 	# generator_checkpoint_path = opts['generator_checkpoint']
-	generator_checkpoint_path = './checkpoints/ffhq2ladiescrop.pt'
+	# generator_checkpoint_path = './checkpoints/ffhq2ladiescrop.pt'
 
 	# Load experiment settings
 	config = {'image_save_iter': 10000, 'image_display_iter': 100, 'display_size': 16, 'snapshot_save_iter': 10000, 'log_iter': 100, 'max_iter': 1000000, 'batch_size': 1, 'weight_decay': 0.0001, 'beta1': 0.5, 'beta2': 0.999, 'init': 'kaiming', 'lr': 0.0001, 'lr_policy': 'step', 'step_size': 100000, 'gamma': 0.5, 'gan_w': 1, 'recon_x_w': 10, 'recon_s_w': 1, 'recon_c_w': 1, 'recon_x_cyc_w': 10, 'vgg_w': 0, 'gen': {'dim': 64, 'mlp_dim': 256, 'style_dim': 8, 'activ': 'relu', 'n_downsample': 2, 'n_res': 4, 'pad_type': 'reflect'}, 'dis': {'dim': 64, 'norm': 'none', 'activ': 'lrelu', 'n_layer': 4, 'gan_type': 'lsgan', 'num_scales': 3, 'pad_type': 'reflect'}, 'input_dim_a': 3, 'input_dim_b': 3, 'num_workers': 8, 'new_size': 1024, 'crop_image_height': 400, 'crop_image_width': 400, 'data_root': './datasets/ffhq2ladies/'}
@@ -32,9 +32,6 @@ def setup(opts):
 	#     trainer.gen_a.load_state_dict(state_dict['a'])
 	#     trainer.gen_b.load_state_dict(state_dict['b'])
 
-	trainer.cuda()
-	trainer.eval()
-
 	return {'model': trainer, 'config': config}
 
 @runway.command(name='generate',
@@ -43,10 +40,10 @@ def setup(opts):
                 description='Image translation with style seeding')
 def generate(model, args):
 	#start command here?
-	model = model['model']
+	trainer = model['model']
 	config = model['config']
 	image_in = args['image'].convert('RGB')
-	print(image_in)
+	# print(image_in)
 
 	# replace this
 	num_style_start = args['style']
@@ -54,6 +51,8 @@ def generate(model, args):
 	torch.cuda.manual_seed(num_style_start)
 	new_size = config['new_size']
 
+	trainer.cuda()
+	trainer.eval()
 	encode = trainer.gen_a.encode if a2b else trainer.gen_b.encode # encode function
 	# style_encode = trainer.gen_b.encode if a2b else trainer.gen_a.encode # encode function
 	decode = trainer.gen_b.decode if a2b else trainer.gen_a.decode # decode function
