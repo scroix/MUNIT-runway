@@ -13,7 +13,8 @@ a2b = 1
 
 @runway.setup(options={'generator_checkpoint': runway.file(description="Checkpoint for the generator", extension='.pt')})
 def setup(opts):
-	generator_checkpoint_path = opts['generator_checkpoint']
+	# generator_checkpoint_path = opts['generator_checkpoint']
+	generator_checkpoint_path = './checkpoints/ffhq2ladiescrop.pt'
 
 	# Load experiment settings
 	config = {'image_save_iter': 10000, 'image_display_iter': 100, 'display_size': 16, 'snapshot_save_iter': 10000, 'log_iter': 100, 'max_iter': 1000000, 'batch_size': 1, 'weight_decay': 0.0001, 'beta1': 0.5, 'beta2': 0.999, 'init': 'kaiming', 'lr': 0.0001, 'lr_policy': 'step', 'step_size': 100000, 'gamma': 0.5, 'gan_w': 1, 'recon_x_w': 10, 'recon_s_w': 1, 'recon_c_w': 1, 'recon_x_cyc_w': 10, 'vgg_w': 0, 'gen': {'dim': 64, 'mlp_dim': 256, 'style_dim': 8, 'activ': 'relu', 'n_downsample': 2, 'n_res': 4, 'pad_type': 'reflect'}, 'dis': {'dim': 64, 'norm': 'none', 'activ': 'lrelu', 'n_layer': 4, 'gan_type': 'lsgan', 'num_scales': 3, 'pad_type': 'reflect'}, 'input_dim_a': 3, 'input_dim_b': 3, 'num_workers': 8, 'new_size': 1024, 'crop_image_height': 400, 'crop_image_width': 400, 'data_root': './datasets/ffhq2ladies/'}
