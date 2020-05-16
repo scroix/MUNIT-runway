@@ -1,7 +1,7 @@
 version: 0.1
 python: 3.6
 entrypoint: python runway_model.py
-cuda: 10
+cuda: 10.2
 framework: "pytorch"
 spec:
     cpu: False
@@ -9,7 +9,7 @@ spec:
 build_steps:
     - pip install runway-python==0.0.74
     - pip install torch===1.2.0 torchvision===0.4.0 -f https://download.pytorch.org/whl/torch_stable.html
-    - pip install cudatoolkit==10.0 torchfile PyYAML
+    - pip install torchfile PyYAML
     - pip install -r requirements.txt
     - if_gpu: echo "Building in a GPU environment..."
     - if_cpu: echo "Building in a CPU only environment..."
