@@ -22,14 +22,14 @@ def setup(opts):
 	trainer = MUNIT_Trainer(config)
 	style_dim = config['gen']['style_dim']
 
-	try:
-	    state_dict = torch.load(generator_checkpoint_path)
-	    trainer.gen_a.load_state_dict(state_dict['a'])
-	    trainer.gen_b.load_state_dict(state_dict['b'])
-	except:
-	    state_dict = pytorch03_to_pytorch04(torch.load(checkpoint), trainer)
-	    trainer.gen_a.load_state_dict(state_dict['a'])
-	    trainer.gen_b.load_state_dict(state_dict['b'])
+	# try:
+    state_dict = torch.load(generator_checkpoint_path)
+    trainer.gen_a.load_state_dict(state_dict['a'])
+    trainer.gen_b.load_state_dict(state_dict['b'])
+	# except:
+	#     state_dict = torch.load(checkpoint), trainer
+	#     trainer.gen_a.load_state_dict(state_dict['a'])
+	#     trainer.gen_b.load_state_dict(state_dict['b'])
 
 	trainer.cuda()
 	trainer.eval()
