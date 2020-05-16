@@ -11,8 +11,6 @@ from PIL import Image
 
 a2b = 1
 
-
-
 @runway.setup(options={'generator_checkpoint': runway.file(description="Checkpoint for the generator", extension='.pt')})
 def setup(opts):
 	generator_checkpoint_path = opts['generator_checkpoint']
@@ -35,29 +33,35 @@ def setup(opts):
 
 	trainer.cuda()
 	trainer.eval()
-	encode = trainer.gen_a.encode if a2b else trainer.gen_b.encode # encode function
-	style_encode = trainer.gen_b.encode if a2b else trainer.gen_a.encode # encode function
-	decode = trainer.gen_b.decode if a2b else trainer.gen_a.decode # decode function
+
+	return {'model': trainer, 'config': config}
 
 @runway.command(name='generate',
-                inputs={ 'image': image(description='Input image'), 'style': number(default=1, min=0, max=1000, step=1, description='Style Seed') },
+                inputs={ 'image': image(description='Input image'), 'style': number(default=1, min=0, max=1000, description='Style Seed') },
                 outputs={ 'image': image(description='Output image') },
                 description='Image translation with style seeding')
-def generate(model, opts):
+def generate(model, args):
 	#start command here?
+	model = model['model']
+	config = model['config']
+	image_in = args['image'].convert('RGB')
+	print(image_in)
 
 	# replace this
-	num_style_start = 11
-
+	num_style_start = args['style']
 	torch.manual_seed(num_style_start)
 	torch.cuda.manual_seed(num_style_start)
 	new_size = config['new_size']
+
+	encode = trainer.gen_a.encode if a2b else trainer.gen_b.encode # encode function
+	# style_encode = trainer.gen_b.encode if a2b else trainer.gen_a.encode # encode function
+	decode = trainer.gen_b.decode if a2b else trainer.gen_a.decode # decode function
 
 	with torch.no_grad():
 	    transform = transforms.Compose([transforms.Resize(new_size),
 	                                    transforms.ToTensor(),
 	                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-	    image = Variable(transform(Image.open(input).convert('RGB')).unsqueeze(0).cuda())
+	    image = Variable(transform(image_in).unsqueeze(0).cuda())
 	    #maybe for a future version?
 	    # style_image = Variable(transform(Image.open(style).convert('RGB')).unsqueeze(0).cuda()) if opts.style != '' else None
 
@@ -74,7 +78,7 @@ def generate(model, opts):
 	    vutils.save_image(outputs.data, path, padding=0, normalize=True)
 
 	return {
-        'image': outputs
+        'image': Image.fromarray(tensor2im(outputs))
     }  
 
 if __name__ == '__main__':
