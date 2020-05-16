@@ -23,9 +23,9 @@ def setup(opts):
 	style_dim = config['gen']['style_dim']
 
 	# try:
-    state_dict = torch.load(generator_checkpoint_path)
-    trainer.gen_a.load_state_dict(state_dict['a'])
-    trainer.gen_b.load_state_dict(state_dict['b'])
+	state_dict = torch.load(generator_checkpoint_path)
+	trainer.gen_a.load_state_dict(state_dict['a'])
+	trainer.gen_b.load_state_dict(state_dict['b'])
 	# except:
 	#     state_dict = torch.load(checkpoint), trainer
 	#     trainer.gen_a.load_state_dict(state_dict['a'])
