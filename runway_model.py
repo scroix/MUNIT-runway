@@ -51,7 +51,9 @@ def generate(model, args):
 	num_style_start = args['style']
 	torch.manual_seed(num_style_start)
 	torch.cuda.manual_seed(num_style_start)
-	new_size = config['new_size']
+	height,width = image_in.size
+	new_size = min(height,width)
+	# print(new_size)
 
 	trainer.cuda()
 	trainer.eval()
