@@ -1,12 +1,12 @@
-version: 0.1
+version: 0.2
 python: 3.6
 entrypoint: python runway_model.py
-cuda: 10.2
-framework: pytorch
+cuda: 11.1
 spec:
     cpu: False
     gpu: True
 build_steps:
-    - pip install runway-python==0.0.74
-    - pip install torchfile PyYAML
+    - pip install runway-python
+    - pip install torch==1.7.0 torchvision torchfile
+    - pip install tensorboard tensorboardx
     - pip install -r requirements.txt
