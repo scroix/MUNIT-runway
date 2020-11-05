@@ -1,5 +1,5 @@
-version: 0.2
-python: 3.6
+version: 0.3
+python: 3.8
 entrypoint: python runway_model.py
 cuda: 11
 spec:
